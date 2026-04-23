@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package map_engine.hdmap;
+
+import "common_msgs/map_msgs/map_geometry.proto";
+import "common_msgs/map_msgs/map_id.proto";
+
+message Area {
+  enum Type {
+    SHOVEL_LOADING_AREA = 1;  // 铲装区
+    CRUSHING_STATION = 2;     // 破碎站
+    DISPOSAL_AREA = 3;        // 排土区
+    PARKING_AREA = 4;         // 停车区
+    GAS_STATION = 5;          // 加油区
+    MAINTENANCE_AREA = 6;     // 检修区
+    JOP_POINT = 7;            // 功能点
+    PARKING_SPACE = 8;        // 停车位
+    FREE_SPACE_AREA = 9;      // 可行驶区
+    OBSTACLE_AREA = 10;     // 障碍区
+  };
+
+  required Id id = 1;
+  optional Type type = 2;
+  required Polygon polygon = 3;
+  repeated Id overlap_id = 4;
+  optional string name = 5;
+}

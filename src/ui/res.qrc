@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>icons/add-path-point.png</file>
+        <file>icons/arc.png</file>
+        <file>icons/area_sweep.png</file>
+        <file>icons/area-connect.png</file>
+        <file>icons/area-goods.png</file>
+        <file>icons/area-maintain.png</file>
+        <file>icons/area-road.png</file>
+        <file>icons/area-takeover.png</file>
+        <file>icons/area-trash.png</file>
+        <file>icons/area-water.png</file>
+        <file>icons/bezier.png</file>
+        <file>icons/bspline.png</file>
+        <file>icons/copy.png</file>
+        <file>icons/cut.png</file>
+        <file>icons/link.png</file>
+        <file>icons/paste.png</file>
+        <file>icons/redo.png</file>
+        <file>icons/undo.png</file>
+        <file>icons/clip-polygon.png</file>
+        <file>icons/delete-segment.png</file>
+        <file>icons/edit-segment.png</file>
+        <file>icons/edit.png</file>
+        <file>icons/measure.png</file>
+        <file>icons/merge-segment.png</file>
+        <file>icons/move.png</file>
+        <file>icons/point-filter.png</file>
+        <file>icons/zoom-in.png</file>
+        <file>icons/zoom-out.png</file>
+    </qresource>
+</RCC>

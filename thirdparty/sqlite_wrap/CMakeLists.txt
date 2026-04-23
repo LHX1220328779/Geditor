@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.5)
+project(sqlite_wrap)
+
+set(DEFAULT_BUILD_TYPE "Release")
+set(CMAKE_CXX_FLAGS "-g -std=c++11 -Wall -Wno-reorder")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2 -g -std=c++11 -Wall -Wno-reorder")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -std=c++11 -Wall -Wno-reorder")
+set(CMAKE_CXX_FLAGS  "-ldl -pthread")
+file(GLOB_RECURSE LIB_SRCS src/*.cc)
+add_library(sqlite3 STATIC src/sqlite3.c)
+add_library(sqlite_wrap STATIC ${LIB_SRCS})

@@ -1,0 +1,13 @@
+build
+CMakeLists.txt.user
+*.vdb
+*.db
+*.pdb
+*.osm
+.vscode
+data
+*.zip
+*.autosave
+bin/
+test/
+.log

@@ -1,0 +1,47 @@
+syntax = "proto2";
+
+package map_engine.hdmap;
+
+message GeoPoint {
+  optional double x = 1 [default = nan];
+  optional double y = 2 [default = nan];
+  optional double z = 3 [default = 0.0];
+}
+message DynamicData {
+  enum Type {
+    ENTRY_LINE = 1;  // 驶入轨迹
+    BACK_LINE = 2;   // 倒车轨迹
+    EXIT_LINE = 3;   // 驶出轨迹
+    BACK_START_POINT = 4; // ‘人’字形倒车起始点
+    BACK_END_POINT = 5;  // ‘人’字形倒车结束点
+    BOILING_AREA = 6;      // 翻浆区
+    IMPASSABLE_AREA = 7;   // 不可通行区域
+    SCATTERED_AREA = 8;    // 洒落区域
+  };
+  enum GeoType {
+    GEO_NONE = 1;     // 没有位置信息
+    GEO_POINT = 2;    // 点坐标
+    GEO_LINE = 3;     // 线坐标
+    GEO_POLYGON = 4;  // 面坐标
+    GEO_POSE = 5;    // 两个点，第一个表达位置，第二个点表达朝向
+  }
+  enum BelongingRegion {
+      UNKNOW = 1;            // 无所属关联
+      MAIN_ROASD = 2;        // 在主路上
+      SHOVEL_LOADING = 3;    // 在产装区
+      CRUSHING_STATION = 4;  // 在破碎站
+      DISPOSAL_AREA = 5;     // 在排土区
+  }
+  required string id = 1;                // 唯一id
+  optional Type type = 2;            // 类型
+  optional GeoType geo_type = 3;     // 坐标类型
+  repeated GeoPoint pts = 4;         // 坐标序列
+  optional BelongingRegion reg = 5;  // 关联区域
+  optional string info = 6;          // 描述信息
+}
+
+message Dynamic {
+  optional string report_time = 1;    // 数据出版时间
+  repeated DynamicData dynamic_data = 2;  // 动态数据
+  optional string lowest_supported_static_data_verison = 3;  // 支持的最低静态数据版本
+}

@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GeditorMainWindow</class>
+ <widget class="QMainWindow" name="GeditorMainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1042</width>
+    <height>682</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Geditor</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout_8">
+    <item row="0" column="0" colspan="2">
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="1">
+       <layout class="QGridLayout" name="gridLayout_2" rowstretch="0">
+        <item row="0" column="0">
+         <widget class="QTableWidget" name="tab_att">
+          <property name="minimumSize">
+           <size>
+            <width>220</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>220</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="3" column="0" colspan="2">
+         <widget class="QPushButton" name="generate_topo">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>180</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>180</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>生成拓扑(g)</string>
+          </property>
+          <property name="shortcut">
+           <string>G</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QPushButton" name="button_2D">
+          <property name="maximumSize">
+           <size>
+            <width>90</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>2D</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0" rowspan="2" colspan="3">
+         <widget class="DisplayWidget" name="display_widget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>9999</width>
+            <height>2200</height>
+           </size>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="button_redo">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>恢复</string>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+Shift+Z</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="delete_status">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>删除(del)</string>
+          </property>
+          <property name="shortcut">
+           <string>Del</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QPushButton" name="check_relation">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>矫正关联</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2" rowspan="4">
+         <widget class="QTabWidget" name="tabWidgetFuns">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>600</width>
+            <height>180</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>6000</width>
+            <height>180</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="VectorMap">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <attribute name="title">
+            <string>矢量地图</string>
+           </attribute>
+           <widget class="QWidget" name="layoutWidget">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>601</width>
+              <height>141</height>
+             </rect>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_18">
+             <property name="leftMargin">
+              <number>5</number>
+             </property>
+             <property name="topMargin">
+              <number>5</number>
+             </property>
+             <item row="7" column="1">
+              <widget class="QRadioButton" name="move_status">
+               <property name="text">
+                <string>移到(m)</string>
+               </property>
+               <property name="shortcut">
+                <string>M</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="Line" name="line_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="Line" name="line_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QRadioButton" name="draw_jobarea">
+               <property name="toolTip">
+                <string>停车场，公园等有进出口的区域</string>
+               </property>
+               <property name="text">
+                <string>功能区(a)</string>
+               </property>
+               <property name="shortcut">
+                <string>A</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QRadioButton" name="draw_jobpoint">
+               <property name="toolTip">
+                <string>停车位、功能点位等；两个点表示点位与方向。</string>
+               </property>
+               <property name="text">
+                <string>功能点(p)</string>
+               </property>
+               <property name="shortcut">
+                <string>P</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QRadioButton" name="edit_status">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                 <italic>false</italic>
+                 <underline>false</underline>
+                </font>
+               </property>
+               <property name="text">
+                <string>编辑(e)</string>
+               </property>
+               <property name="shortcut">
+                <string>E</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="2">
+              <widget class="QRadioButton" name="measure_status">
+               <property name="text">
+                <string>测距(d)</string>
+               </property>
+               <property name="shortcut">
+                <string>D</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="0">
+              <widget class="QRadioButton" name="direction_status">
+               <property name="toolTip">
+                <string>设定行驶方向：选中后再点击&quot;上山&quot;或&quot;下山&quot;，依次点击两个轨迹节点作为起止点，中间所有轨迹段会自动生成带方向的中心线</string>
+               </property>
+               <property name="text">
+                <string>设定行驶方向</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="1">
+              <widget class="QPushButton" name="btn_direction_up">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="toolTip">
+                <string>上山方向：依次点击两个轨迹节点作为起止点</string>
+               </property>
+               <property name="text">
+                <string>上山</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton{background:#d0e6ff;} QPushButton:checked{background:#79b8ff;font-weight:bold;}</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="2">
+              <widget class="QPushButton" name="btn_direction_down">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="toolTip">
+                <string>下山方向：依次点击两个轨迹节点作为起止点</string>
+               </property>
+               <property name="text">
+                <string>下山</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton{background:#fff5c0;} QPushButton:checked{background:#f7c843;font-weight:bold;}</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QRadioButton" name="draw_sign">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="toolTip">
+                <string>红绿灯，标志牌</string>
+               </property>
+               <property name="text">
+                <string>交通标志(t)</string>
+               </property>
+               <property name="shortcut">
+                <string>T, Enter</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="3">
+              <widget class="QRadioButton" name="scan_status">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QRadioButton::indicator{width: 0px;}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QRadioButton" name="draw_line">
+               <property name="toolTip">
+                <string>车道边界等</string>
+               </property>
+               <property name="text">
+                <string>边界线(b)</string>
+               </property>
+               <property name="shortcut">
+                <string>B</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QRadioButton" name="draw_roadarea">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="toolTip">
+                <string>停止线，斑马线，导流区等路面区域</string>
+               </property>
+               <property name="text">
+                <string>路面标识(r)</string>
+               </property>
+               <property name="shortcut">
+                <string>R</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QRadioButton" name="draw_lane">
+               <property name="toolTip">
+                <string>车道中心线</string>
+               </property>
+               <property name="text">
+                <string>车道中线(l)</string>
+               </property>
+               <property name="shortcut">
+                <string>L</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="Line" name="line">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QComboBox" name="combox_line">
+               <item>
+                <property name="text">
+                 <string>折线</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>三次B样条</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>弧线</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="button_undo">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>撤销</string>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+Z</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="button_3D">
+          <property name="maximumSize">
+           <size>
+            <width>90</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>3D</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1042</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <widget class="QMenu" name="menuVector_Map_Builder">
+    <property name="title">
+     <string>Geditor</string>
+    </property>
+    <addaction name="set_cloud"/>
+    <addaction name="instruction"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>工具</string>
+    </property>
+    <addaction name="llh2utm"/>
+    <addaction name="view_pan"/>
+    <addaction name="action_AUTO_BIND_TRAJECTORY"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>图层</string>
+    </property>
+    <addaction name="show_pdb"/>
+    <addaction name="show_line"/>
+    <addaction name="show_lane"/>
+    <addaction name="show_roadarea"/>
+    <addaction name="show_sign"/>
+    <addaction name="show_tra"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="actionUserGuide"/>
+   </widget>
+   <widget class="QMenu" name="menuQuick">
+    <property name="title">
+     <string>快捷功能</string>
+    </property>
+    <addaction name="action_QUICK_PICK_TRAJ"/>
+    <addaction name="action_QUICK_AUTO_BIND"/>
+    <addaction name="separator"/>
+    <addaction name="action_QUICK_ROAD_RIGHT"/>
+    <addaction name="action_QUICK_EXPORT_ROAD_RIGHT"/>
+    <addaction name="action_QUICK_IMPORT_ROAD_RIGHT"/>
+    <addaction name="separator"/>
+    <addaction name="action_QUICK_CHECK_CONNECTIVITY"/>
+    <addaction name="separator"/>
+    <addaction name="action_QUICK_ADAPTIVE_BOUNDARY"/>
+    <addaction name="separator"/>
+    <addaction name="action_QUICK_VIZ_ROAD_RIGHT"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="pcd2pdb"/>
+    <addaction name="db2pdb"/>
+    <addaction name="separator"/>
+    <addaction name="actionDownload_pdb"/>
+    <addaction name="actionDownload_vdb"/>
+    <addaction name="separator"/>
+    <addaction name="import_pdb"/>
+    <addaction name="import_vdb"/>
+    <addaction name="import_tra"/>
+    <addaction name="separator"/>
+    <addaction name="export_vdb"/>
+    <addaction name="upload_map"/>
+   </widget>
+   <addaction name="menuVector_Map_Builder"/>
+   <addaction name="menuFile"/>
+   <addaction name="menuView"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuHelp"/>
+   <addaction name="menuQuick"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionIMPORT">
+   <property name="text">
+    <string>IMPORT</string>
+   </property>
+  </action>
+  <action name="import_pdb">
+   <property name="text">
+    <string>导入pdb</string>
+   </property>
+  </action>
+  <action name="import_vdb">
+   <property name="text">
+    <string>导入vdb</string>
+   </property>
+  </action>
+  <action name="import_pcd">
+   <property name="text">
+    <string>导入pcd</string>
+   </property>
+  </action>
+  <action name="Import_Trajectory">
+   <property name="text">
+    <string>Import Trajectory</string>
+   </property>
+  </action>
+  <action name="actionEXPORT">
+   <property name="text">
+    <string>EXPORT</string>
+   </property>
+  </action>
+  <action name="export_vdb">
+   <property name="text">
+    <string>导出vdb</string>
+   </property>
+  </action>
+  <action name="export_osm">
+   <property name="text">
+    <string>导出osm</string>
+   </property>
+  </action>
+  <action name="export_apollo">
+   <property name="text">
+    <string>导出apollo</string>
+   </property>
+  </action>
+  <action name="Export_AsImage">
+   <property name="text">
+    <string>Export As Image</string>
+   </property>
+  </action>
+  <action name="Create_Lan2Maps">
+   <property name="text">
+    <string>Create Lanelet2Maps</string>
+   </property>
+  </action>
+  <action name="Create_Waypoints">
+   <property name="text">
+    <string>Create Waypoints</string>
+   </property>
+  </action>
+  <action name="db2pdb">
+   <property name="text">
+    <string>db转pdb</string>
+   </property>
+  </action>
+  <action name="actionRedo_Cmd_Shift_Z">
+   <property name="text">
+    <string>Redo(Cmd+Shift+Z)</string>
+   </property>
+  </action>
+  <action name="llh2utm">
+   <property name="text">
+    <string>经纬度与UTM互转</string>
+   </property>
+  </action>
+  <action name="show_pdb">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>点云图层</string>
+   </property>
+  </action>
+  <action name="show_line">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>折线图层</string>
+   </property>
+  </action>
+  <action name="show_lane">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>车道图层</string>
+   </property>
+  </action>
+  <action name="actionUserGuide">
+   <property name="text">
+    <string>关于Geditor</string>
+   </property>
+  </action>
+  <action name="actionUserGuide_Japanese">
+   <property name="text">
+    <string>UserGuide(Japanese)</string>
+   </property>
+  </action>
+  <action name="actionss">
+   <property name="text">
+    <string>ss</string>
+   </property>
+  </action>
+  <action name="show_roadarea">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>通行区图层</string>
+   </property>
+  </action>
+  <action name="show_sign">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>交通标志图层</string>
+   </property>
+  </action>
+  <action name="actionset">
+   <property name="text">
+    <string>set</string>
+   </property>
+  </action>
+  <action name="set_cloud">
+   <property name="text">
+    <string>设置点云</string>
+   </property>
+  </action>
+  <action name="instruction">
+   <property name="text">
+    <string>使用说明</string>
+   </property>
+  </action>
+  <action name="import_tra">
+   <property name="text">
+    <string>导入轨迹</string>
+   </property>
+  </action>
+  <action name="action_AUTO_BIND_TRAJECTORY">
+   <property name="text">
+    <string>自动绑定轨迹</string>
+   </property>
+   <property name="toolTip">
+    <string>将所有未绑定的中心线自动匹配到重合度最高的轨迹，写入矿山路段索引和编号</string>
+   </property>
+  </action>
+  <action name="action_QUICK_PICK_TRAJ">
+   <property name="text">
+    <string>点轨迹生成中心线</string>
+   </property>
+   <property name="toolTip">
+    <string>依次点击同一条轨迹的起点和终点，自动描着轨迹节点生成一条带方向的中心线</string>
+   </property>
+  </action>
+  <action name="action_QUICK_AUTO_BIND">
+   <property name="text">
+    <string>自动绑定轨迹(阈值可调)</string>
+   </property>
+   <property name="toolTip">
+    <string>按当前走廊宽度和覆盖率阈值将未绑定的中心线匹配到轨迹，支持预览</string>
+   </property>
+  </action>
+  <action name="action_QUICK_ROAD_RIGHT">
+   <property name="text">
+    <string>一键校验 road_right</string>
+   </property>
+   <property name="toolTip">
+    <string>按阈值 A(初值5.8m) 自动判定所有中心线 road_right 并写回属性窗口</string>
+   </property>
+  </action>
+  <action name="action_QUICK_EXPORT_ROAD_RIGHT">
+   <property name="text">
+    <string>导出 road_right.txt</string>
+   </property>
+  </action>
+  <action name="action_QUICK_IMPORT_ROAD_RIGHT">
+   <property name="text">
+    <string>导入 road_right.txt (沿用历史)</string>
+   </property>
+  </action>
+  <action name="action_QUICK_CHECK_CONNECTIVITY">
+   <property name="text">
+    <string>校验中心线连通性</string>
+   </property>
+   <property name="toolTip">
+    <string>检查所有中心线的前续/后继关系是否符合 起始/终止/中间 角色</string>
+   </property>
+  </action>
+  <action name="action_QUICK_ADAPTIVE_BOUNDARY">
+   <property name="text">
+    <string>自适应生成边界(平滑)</string>
+   </property>
+   <property name="toolTip">
+    <string>按"双开/单开均匀碾压"参数逐顶点变宽生成左右边界，接缝处自动 taper 平滑</string>
+   </property>
+  </action>
+  <action name="action_QUICK_VIZ_ROAD_RIGHT">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>可视化 road_right</string>
+   </property>
+   <property name="toolTip">
+    <string>勾选后：road_right=1 的中心线左右边界围成的区域从浅白色改为浅绿色，便于总览均匀碾压路段</string>
+   </property>
+  </action>
+  <action name="actioncc">
+   <property name="text">
+    <string>cc</string>
+   </property>
+  </action>
+  <action name="show_tra">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>轨迹图层</string>
+   </property>
+  </action>
+  <action name="view_pan">
+   <property name="text">
+    <string>全局视角</string>
+   </property>
+  </action>
+  <action name="pcd2pdb">
+   <property name="text">
+    <string>pcd转pdb</string>
+   </property>
+  </action>
+  <action name="upload_map">
+   <property name="text">
+    <string>上传地图</string>
+   </property>
+  </action>
+  <action name="actionDownload_pdb">
+   <property name="text">
+    <string>下载pdb</string>
+   </property>
+  </action>
+  <action name="actionDownload_vdb">
+   <property name="text">
+    <string>下载vdb</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>DisplayWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header>ui/display_widget.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>tabWidgetFuns</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

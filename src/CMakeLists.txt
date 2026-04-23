@@ -1,0 +1,13 @@
+include_directories(${PROJECT_SOURCE_DIR}/src)
+
+add_subdirectory(algorithm)
+add_subdirectory(core)
+add_subdirectory(renderGL)
+add_subdirectory(platform)
+add_subdirectory(map)
+add_subdirectory(utils)
+add_subdirectory(pcd)
+add_subdirectory(sprinkle)
+add_subdirectory(coverage)
+add_subdirectory(ui)
+add_subdirectory(app)

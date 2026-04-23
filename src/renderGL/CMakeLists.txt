@@ -1,0 +1,2 @@
+file(GLOB_RECURSE SRCS ${CMAKE_CURRENT_SOURCE_DIR}/*.cc)
+add_library(${PROJECT_NAME}_render ${SRCS})

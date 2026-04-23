@@ -1,0 +1,163 @@
+CMake Error: The current CMakeCache.txt directory /home/project/geditor_1/thirdparty/minilzo/build/CMakeCache.txt is different than the directory /home/lyy/workspace/geditor/thirdparty/minilzo/build where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+CMake Error: The source "/home/project/geditor_1/thirdparty/minilzo/CMakeLists.txt" does not match the source "/home/lyy/workspace/geditor/thirdparty/minilzo/CMakeLists.txt" used to generate cache.  Re-run cmake with a different source directory.
+/bin/sh: 1: cd: can't cd to /home/lyy/workspace/geditor/thirdparty/minilzo/build
+make[2]: *** [CMakeFiles/minilzo.dir/build.make:109: CMakeFiles/minilzo.dir/depend] Error 2
+make[1]: *** [CMakeFiles/Makefile2:82: CMakeFiles/minilzo.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
+CMake Error: The current CMakeCache.txt directory /home/project/geditor_1/thirdparty/sqlite_wrap/build/CMakeCache.txt is different than the directory /home/lyy/workspace/geditor/thirdparty/sqlite_wrap/build where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt
+CMake Error: The source "/home/project/geditor_1/thirdparty/sqlite_wrap/CMakeLists.txt" does not match the source "/home/lyy/workspace/geditor/thirdparty/sqlite_wrap/CMakeLists.txt" used to generate cache.  Re-run cmake with a different source directory.
+/bin/sh: 1: cd: can't cd to /home/lyy/workspace/geditor/thirdparty/sqlite_wrap/build
+make[2]: *** [CMakeFiles/sqlite3.dir/build.make:109: CMakeFiles/sqlite3.dir/depend] Error 2
+make[1]: *** [CMakeFiles/Makefile2:84: CMakeFiles/sqlite3.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+/bin/sh: 1: cd: can't cd to /home/lyy/workspace/geditor/thirdparty/sqlite_wrap/build
+make[2]: *** [CMakeFiles/sqlite_wrap.dir/build.make:189: CMakeFiles/sqlite_wrap.dir/depend] Error 2
+make[1]: *** [CMakeFiles/Makefile2:110: CMakeFiles/sqlite_wrap.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
+CMake Warning (dev) at /usr/share/cmake-3.22/Modules/FindOpenGL.cmake:315 (message):
+  Policy CMP0072 is not set: FindOpenGL prefers GLVND by default when
+  available.  Run "cmake --help-policy CMP0072" for policy details.  Use the
+  cmake_policy command to set the policy and suppress this warning.
+
+  FindOpenGL found both a legacy GL library:
+
+    OPENGL_gl_LIBRARY: /usr/lib/x86_64-linux-gnu/libGL.so
+
+  and GLVND libraries for OpenGL and GLX:
+
+    OPENGL_opengl_LIBRARY: /usr/lib/x86_64-linux-gnu/libOpenGL.so
+    OPENGL_glx_LIBRARY: /usr/lib/x86_64-linux-gnu/libGLX.so
+
+  OpenGL_GL_PREFERENCE has not been set to "GLVND" or "LEGACY", so for
+  compatibility with CMake 3.10 and below the legacy GL library will be used.
+Call Stack (most recent call first):
+  cmake/packages.cmake:5 (find_package)
+  CMakeLists.txt:13 (include)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to pcap will be disabled
+In file included from /home/project/geditor_1/src/core/boundary_layer.h:13,
+                 from /home/project/geditor_1/src/app/vdb2dynamic.h:6,
+                 from /home/project/geditor_1/src/app/vdb2dynamic.cc:1:
+/home/project/geditor_1/src/core/layer.h: In constructor ‘geditor::PickupResult::PickupResult()’:
+/home/project/geditor_1/src/core/layer.h:21:5: warning: statement has no effect [-Wunused-value]
+   21 |     ptNearPoint;
+      |     ^~~~~~~~~~~
+/home/project/geditor_1/src/core/layer.h: In function ‘geditor::MapFeature* geditor::GetFeatureVec(int, const C&)’:
+/home/project/geditor_1/src/core/layer.h:77:8: warning: suggest explicit braces to avoid ambiguous ‘else’ [-Wdangling-else]
+   77 |     if (vec[i]->GetUniqueID() == idx)
+      |        ^
+In file included from /home/project/geditor_1/src/core/boundary_layer.h:13,
+                 from /home/project/geditor_1/src/app/vdb2pb.h:12,
+                 from /home/project/geditor_1/src/app/vdb2pb.cc:1:
+/home/project/geditor_1/src/core/layer.h: In constructor ‘geditor::PickupResult::PickupResult()’:
+/home/project/geditor_1/src/core/layer.h:21:5: warning: statement has no effect [-Wunused-value]
+   21 |     ptNearPoint;
+      |     ^~~~~~~~~~~
+/home/project/geditor_1/src/core/layer.h: In function ‘geditor::MapFeature* geditor::GetFeatureVec(int, const C&)’:
+/home/project/geditor_1/src/core/layer.h:77:8: warning: suggest explicit braces to avoid ambiguous ‘else’ [-Wdangling-else]
+   77 |     if (vec[i]->GetUniqueID() == idx)
+      |        ^
+In file included from /home/project/geditor_1/src/core/framework.h:11,
+                 from /home/project/geditor_1/src/ui/display_widget.h:11,
+                 from /home/project/geditor_1/src/ui/display_widget.cc:4:
+/home/project/geditor_1/src/core/layer.h: In constructor ‘geditor::PickupResult::PickupResult()’:
+/home/project/geditor_1/src/core/layer.h:21:5: warning: statement has no effect [-Wunused-value]
+   21 |     ptNearPoint;
+      |     ^~~~~~~~~~~
+/home/project/geditor_1/src/core/layer.h: In function ‘geditor::MapFeature* geditor::GetFeatureVec(int, const C&)’:
+/home/project/geditor_1/src/core/layer.h:77:8: warning: suggest explicit braces to avoid ambiguous ‘else’ [-Wdangling-else]
+   77 |     if (vec[i]->GetUniqueID() == idx)
+      |        ^
+In file included from /home/project/geditor_1/src/core/framework.h:21,
+                 from /home/project/geditor_1/src/ui/display_widget.h:11,
+                 from /home/project/geditor_1/src/ui/display_widget.cc:4:
+/home/project/geditor_1/src/map/feature_type.h: In static member function ‘static int FeatType::Find(const std::vector<FeatType>&, int)’:
+/home/project/geditor_1/src/map/feature_type.h:24:23: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<FeatType>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+   24 |     for (int i = 0; i < types.size(); ++i) {
+      |                     ~~^~~~~~~~~~~~~~
+/home/project/geditor_1/src/app/vdb2pb.cc: In member function ‘int geditor::VDB2PB::ConvFeature2Pb(std::string, std::string)’:
+/home/project/geditor_1/src/app/vdb2pb.cc:387:10: warning: unused variable ‘lane_type’ [-Wunused-variable]
+  387 |     auto lane_type = pb_lanes[lane_ids[0]].type();
+      |          ^~~~~~~~~
+/home/project/geditor_1/src/app/vdb2pb.cc: In member function ‘int geditor::VDB2PB::CalcOverlapInfo(const std::vector<geditor::LaneSegment*>&, const std::vector<geditor::JobArea*>&, std::unordered_map<std::__cxx11::basic_string<char>, map_engine::hdmap::Overlap>&, std::unordered_map<std::__cxx11::basic_string<char>, map_engine::hdmap::Lane>&, std::unordered_map<std::__cxx11::basic_string<char>, map_engine::hdmap::Junction>&, std::unordered_map<std::__cxx11::basic_string<char>, map_engine::hdmap::Area>&)’:
+/home/project/geditor_1/src/app/vdb2pb.cc:767:12: warning: unused variable ‘pro_pre’ [-Wunused-variable]
+  767 |       auto pro_pre = p_pre->GetProperty();
+      |            ^~~~~~~
+In file included from /home/project/geditor_1/src/ui/geditor_mainwindow.h:9,
+                 from /home/project/geditor_1/src/ui/display_widget.h:13,
+                 from /home/project/geditor_1/src/ui/display_widget.cc:4:
+/home/project/geditor_1/src/ui/tab_att.h: In member function ‘QTableWidgetItem* geditor::TabAtt::NewItem(const QString&, int)’:
+/home/project/geditor_1/src/ui/tab_att.h:36:39: warning: ‘void QTableWidgetItem::setTextColor(const QColor&)’ is deprecated: Use QTableWidgetItem::setForeground() instead [-Wdeprecated-declarations]
+   36 |     if (flag <= 33) item->setTextColor(QColor("gray"));
+      |                     ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+In file included from /usr/include/x86_64-linux-gnu/qt5/QtWidgets/QTableWidget:1,
+                 from /home/project/geditor_1/src/ui/tab_att.h:4,
+                 from /home/project/geditor_1/src/ui/geditor_mainwindow.h:9,
+                 from /home/project/geditor_1/src/ui/display_widget.h:13,
+                 from /home/project/geditor_1/src/ui/display_widget.cc:4:
+/usr/include/x86_64-linux-gnu/qt5/QtWidgets/qtablewidget.h:156:17: note: declared here
+  156 |     inline void setTextColor(const QColor &color)
+      |                 ^~~~~~~~~~~~
+/home/project/geditor_1/src/ui/display_widget.cc: In member function ‘virtual void DisplayWidget::wheelEvent(QWheelEvent*)’:
+/home/project/geditor_1/src/ui/display_widget.cc:129:19: warning: ‘int QWheelEvent::delta() const’ is deprecated: Use angleDelta() [-Wdeprecated-declarations]
+  129 |   if (event->delta() < 0) {
+      |       ~~~~~~~~~~~~^~
+In file included from /usr/include/x86_64-linux-gnu/qt5/QtGui/QMouseEvent:1,
+                 from /home/project/geditor_1/src/ui/display_widget.h:5,
+                 from /home/project/geditor_1/src/ui/display_widget.cc:4:
+/usr/include/x86_64-linux-gnu/qt5/QtGui/qevent.h:219:16: note: declared here
+  219 |     inline int delta() const  { return qt4D; }
+      |                ^~~~~
+/home/project/geditor_1/src/ui/display_widget.cc: In member function ‘void DisplayWidget::HandlePickTrajectoryClick(QPoint)’:
+/home/project/geditor_1/src/ui/display_widget.cc:908:24: error: invalid use of incomplete type ‘class geditor::LaneSegment’
+  908 |               .arg(lane->GetUniqueID())
+      |                        ^~
+In file included from /home/project/geditor_1/src/ui/display_widget.h:11,
+                 from /home/project/geditor_1/src/ui/display_widget.cc:4:
+/home/project/geditor_1/src/core/framework.h:38:7: note: forward declaration of ‘class geditor::LaneSegment’
+   38 | class LaneSegment;
+      |       ^~~~~~~~~~~
+/home/project/geditor_1/src/ui/display_widget.cc:909:24: error: invalid use of incomplete type ‘class geditor::LaneSegment’
+  909 |               .arg(lane->GetGeometry()->GetVertexCount()),
+      |                        ^~
+In file included from /home/project/geditor_1/src/ui/display_widget.h:11,
+                 from /home/project/geditor_1/src/ui/display_widget.cc:4:
+/home/project/geditor_1/src/core/framework.h:38:7: note: forward declaration of ‘class geditor::LaneSegment’
+   38 | class LaneSegment;
+      |       ^~~~~~~~~~~
+/home/project/geditor_1/src/ui/display_widget.cc: In member function ‘void DisplayWidget::OnDataSave()’:
+/home/project/geditor_1/src/ui/display_widget.cc:603:17: warning: ignoring return value of ‘int system(const char*)’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  603 |           system(cmd.c_str());
+      |           ~~~~~~^~~~~~~~~~~~~
+make[2]: *** [src/ui/CMakeFiles/geditor.dir/build.make:166: src/ui/CMakeFiles/geditor.dir/display_widget.cc.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:546: src/ui/CMakeFiles/geditor.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+In file included from /home/project/geditor_1/build/src/app/common_msgs/map_msgs/map.pb.h:48,
+                 from /home/project/geditor_1/src/app/vdb2pb.h:5,
+                 from /home/project/geditor_1/src/app/vdb2pb.cc:1:
+/home/project/geditor_1/build/src/app/common_msgs/map_msgs/map_area.pb.h: In member function ‘int geditor::VDB2PB::ConvFeature2Pb(std::string, std::string)’:
+/home/project/geditor_1/build/src/app/common_msgs/map_msgs/map_area.pb.h:503:9: warning: ‘type’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+  503 |   type_ = value;
+      |   ~~~~~~^~~~~~~
+/home/project/geditor_1/src/app/vdb2pb.cc:425:18: note: ‘type’ was declared here
+  425 |     PbArea::Type type;
+      |                  ^~~~
+In file included from /home/project/geditor_1/build/src/app/common_msgs/routing_msgs/routing.pb.cc:4:
+/home/project/geditor_1/build/src/app/common_msgs/routing_msgs/routing.pb.h: In member function ‘map_engine::routing::ParkingInfo* map_engine::routing::RoutingRequest::release_parking_info()’:
+/home/project/geditor_1/build/src/app/common_msgs/routing_msgs/routing.pb.h:907:48: warning: ‘map_engine::routing::ParkingInfo* map_engine::routing::RoutingRequest::unsafe_arena_release_parking_info()’ is deprecated [-Wdeprecated-declarations]
+  907 |   auto temp = unsafe_arena_release_parking_info();
+      |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/home/project/geditor_1/build/src/app/common_msgs/routing_msgs/routing.pb.h:302:59: note: declared here
+  302 |   PROTOBUF_DEPRECATED ::map_engine::routing::ParkingInfo* unsafe_arena_release_parking_info();
+      |                                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/project/geditor_1/build/src/app/common_msgs/routing_msgs/routing.pb.cc:4:
+/home/project/geditor_1/build/src/app/common_msgs/routing_msgs/routing.pb.h: In member function ‘map_engine::routing::ParkingInfo* map_engine::routing::RoutingRequest::release_parking_info()’:
+/home/project/geditor_1/build/src/app/common_msgs/routing_msgs/routing.pb.h:907:48: warning: ‘map_engine::routing::ParkingInfo* map_engine::routing::RoutingRequest::unsafe_arena_release_parking_info()’ is deprecated [-Wdeprecated-declarations]
+  907 |   auto temp = unsafe_arena_release_parking_info();
+      |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/home/project/geditor_1/build/src/app/common_msgs/routing_msgs/routing.pb.h:302:59: note: declared here
+  302 |   PROTOBUF_DEPRECATED ::map_engine::routing::ParkingInfo* unsafe_arena_release_parking_info();
+      |                                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make: *** [Makefile:91: all] Error 2

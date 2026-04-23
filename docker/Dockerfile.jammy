@@ -1,0 +1,28 @@
+# 使用官方Ubuntu基础镜像
+#FROM ubuntu:22.04
+FROM hub.zhipeng.zone/hd_map/geditor/ubuntu:22.04
+
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN echo "chooses:\n" > fish_install.yaml \
+&& echo "- {choose: 1, desc: '一键安装:ROS(支持ROS和ROS2,树莓派Jetson)'}\n" >> fish_install.yaml \
+&& echo "- {choose: 1, desc: 更换系统源再继续安装}\n" >> fish_install.yaml \
+&& echo "- {choose: 2, desc: 更换系统源并清理第三方源}\n" >> fish_install.yaml \
+&& echo "- {choose: 1, desc: humble(ROS2)}\n" >> fish_install.yaml \
+&& echo "- {choose: 1, desc: humble(ROS2)桌面版}\n" >> fish_install.yaml \
+&& apt update && apt install wget python3 python3-distro python3-yaml -y \
+&& wget http://fishros.com/install  -O fishros && /bin/bash fishros 
+
+RUN sudo apt-get install -y libgoogle-glog-dev libsuitesparse-dev google-mock \
+                        libeigen3-dev sqlite libgeographic-dev ros-humble-gtsam \
+                        libyaml-cpp-dev libqt5charts5-dev
+
+RUN sudo apt-get install -y fonts-wqy-microhei
+ENV QT_QPA_FONTDIR /usr/share/fonts
+ENV QT_QPA_PLATFORM xcb
+
+RUN apt install ros-humble-novatel-oem7-msgs
+
+WORKDIR /app
+COPY ./bin /app/bin
