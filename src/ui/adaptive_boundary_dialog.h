@@ -6,13 +6,12 @@ class QDoubleSpinBox;
 class QPushButton;
 class QLabel;
 class QTextEdit;
+class QRadioButton;
 class DisplayWidget;
 
-// 自适应边界生成对话框（R3+R4）：
-// - 最低车道宽：双开均匀碾压阈值
-// - 建议车道宽：单开均匀碾压宽度
-// - 边界间距：左右边界与理论宽度的收缩间距
-// - taper 长度：段间平滑过渡长度
+// 自适应边界生成对话框。
+// 所有 "车道宽" = 中心线到边界线的距离（车道半宽）。
+// 参数在进程生命周期内通过静态缓存保留，UI 重启时才重置为初始值。
 class AdaptiveBoundaryDialog : public QDialog {
   Q_OBJECT
 
@@ -26,13 +25,26 @@ class AdaptiveBoundaryDialog : public QDialog {
 
  private:
   DisplayWidget *display_;
-  QDoubleSpinBox *spin_min_lane_;
-  QDoubleSpinBox *spin_max_lane_;
-  QDoubleSpinBox *spin_rec_lane_;
+
+  QDoubleSpinBox *spin_min_lane_dual_;
+  QDoubleSpinBox *spin_max_lane_dual_;
+  QDoubleSpinBox *spin_max_lane_single_;
   QDoubleSpinBox *spin_gap_;
   QDoubleSpinBox *spin_taper_;
+
+  QRadioButton *radio_global_;
+  QRadioButton *radio_local_;
+
   QPushButton *btn_run_;
   QPushButton *btn_close_;
   QLabel *lbl_summary_;
   QTextEdit *txt_detail_;
+
+  // 进程级缓存：跨对话框实例保留用户调过的参数
+  static double s_min_lane_dual;
+  static double s_max_lane_dual;
+  static double s_max_lane_single;
+  static double s_gap;
+  static double s_taper;
+  static bool s_local_mode;
 };

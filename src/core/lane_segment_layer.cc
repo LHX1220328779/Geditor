@@ -1394,6 +1394,10 @@ namespace geditor
         V4f col(1, 1, 1, 0.3);
         if (pLaneSegment->selected() || pLaneSegment->highlighted())
           col = V4f(1, 0, 0, 0.2);
+        // 方向模式 + 选中：底色红色蒙版让位给白色方向色带，避免红/白混色
+        if (_dirActiveEarly &&
+            (pLaneSegment->selected() || pLaneSegment->highlighted()))
+          col = V4f(0, 0, 0, 0); // 透明
         // road_right 可视化：road_right=1 的车道两侧填充改为浅绿
         // 但方向高亮开启且本车道已设置方向时，让方向色带独占，不再染绿
         if (viz_road_right_ && pLaneSegment->GetProperty() &&
@@ -1479,13 +1483,20 @@ namespace geditor
         }
 
         // 方向高亮色带：direction=1 浅蓝 (上山)，direction=2 黄色 (下山)
+        // 选中（多选）时改为低透明度白色蒙版，便于直观识别"局部"作用范围
         if (show_direction_overlay_ && pLaneSegment->GetProperty())
         {
           int dir = pLaneSegment->GetProperty()->direction;
           if (dir == 1 || dir == 2)
           {
-            V4f dirCol = (dir == 1) ? V4f(0.40f, 0.70f, 1.00f, 0.60f)
-                                    : V4f(1.00f, 0.90f, 0.25f, 0.60f);
+            bool sel =
+                pLaneSegment->selected() || pLaneSegment->highlighted();
+            V4f dirCol;
+            if (sel)
+              dirCol = V4f(1.00f, 1.00f, 1.00f, 0.55f); // 白色高亮蒙版
+            else
+              dirCol = (dir == 1) ? V4f(0.40f, 0.70f, 1.00f, 0.60f)
+                                  : V4f(1.00f, 0.90f, 0.25f, 0.60f);
             double overlayWidth = 3.0; // 米
             Drawable *pBand = FactoryDrawable::CreateWidthLineDrawable(
                 pPolyline, vCnt, overlayWidth, dirCol);

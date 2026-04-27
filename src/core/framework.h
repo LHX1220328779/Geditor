@@ -417,6 +417,12 @@ class Framework : public Object {
   // 相邻段通过前驱/后继关系在接缝处做 taper 平滑。
   int GenerateAdaptiveBoundaries(const AdaptiveBoundaryParams &params,
                                  AdaptiveBoundaryDiagnostic *diag);
+  // 局部模式：仅对 targetLanes 列表中的中心线重建边界；
+  // 其他中心线保持不变；相邻段接缝仍尽量贴合已有邻居。
+  int GenerateAdaptiveBoundariesForSelected(
+      const AdaptiveBoundaryParams &params,
+      const std::vector<LaneSegment *> &targetLanes,
+      AdaptiveBoundaryDiagnostic *diag);
 
  private:
   V3f m_StartMouse;
