@@ -21,6 +21,14 @@ class PDBManage {
 
   bool QueryBound(GPSPoint &minGPSPt, GPSPoint &maxGPSPt);
 
+  bool SetUTMZone(int zone);
+
+  bool GetUTMZone(int &zone);
+
+  bool SetPointColorModeRGB(bool enabled);
+
+  bool UsesPointColorRGB();
+
   bool Save(TilePDB *tile);
 
   bool Read(TilePDB *tile);

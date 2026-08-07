@@ -91,6 +91,7 @@ class Loader {
       vCenter = V3d(utmCenter.x, utmCenter.y, 0.0);
 
       PointDrawable *pPtDrawable = new PointDrawable();
+      pPtDrawable->SetSourceColorMode(use_source_rgb_);
       pPtDrawable->SetColorType(color_type_, color_r_);
 
       for (int i = 0; i < tile->point_cloud_.size(); i++) {
@@ -105,7 +106,11 @@ class Loader {
         double y = (utmPt.y - utmCenter.y);
         float z = altitude - gpsCenter.altitude;
 
-        V4f clrf = PointColor::GetColor(intensity, z, color_type_, color_r_);
+        V4f clrf = use_source_rgb_
+                       ? PointColor::FromRGB(tile->point_cloud_[i].rgb,
+                                             intensity)
+                       : PointColor::GetColor(intensity, z, color_type_,
+                                              color_r_);
 
         pPtDrawable->add((float)x, (float)y, (float)z, clrf);
       }
@@ -181,6 +186,7 @@ class Loader {
     color_type_ = type;
     color_r_ = r;
   }
+  void SetUseSourceRGB(bool enabled) { use_source_rgb_ = enabled; }
   void ClearCache() {
     // for (auto &mr : m_cache) {
     //   if (mr.second) delete mr.second;
@@ -199,6 +205,7 @@ class Loader {
   std::atomic<bool> running_;
   int color_type_ = 2;
   int color_r_ = 6;
+  bool use_source_rgb_ = false;
 };
 
 }  // namespace geditor

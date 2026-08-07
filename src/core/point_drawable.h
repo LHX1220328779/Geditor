@@ -24,6 +24,8 @@ class PointDrawable : public Drawable {
 
   virtual void SetColorType(int type, int r);
 
+  void SetSourceColorMode(bool enabled) { source_color_mode_ = enabled; }
+
  private:
   bool CreateVBO();
 
@@ -38,6 +40,7 @@ class PointDrawable : public Drawable {
 
   int color_type_ = -1;
   int color_r_ = -1;
+  bool source_color_mode_ = false;
 };
 
 }  // namespace geditor

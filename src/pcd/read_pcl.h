@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <fstream>
 
 #include "algorithm/common.h"
@@ -35,6 +36,14 @@ struct PCLPoint {
   float y;
   float z;
   float w;
+};
+
+struct PCLRGBPoint {
+  float x = 0.0f;
+  float y = 0.0f;
+  float z = 0.0f;
+  float w = 128.0f;
+  std::uint32_t rgb = 0;
 };
 
 struct PCLPointLable {

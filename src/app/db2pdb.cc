@@ -64,6 +64,10 @@ int main(int argc, char **argv) {
       //保存到数据库
       PDBManage database;
       if (database.Open(FLAGS_pdb_path.c_str())) {
+        if (!database.SetUTMZone(zone)) {
+          LERROR << "无法保存UTM带区元数据";
+          return 4;
+        }
         size_t isize = tileArray.size();
         for (size_t pos = 0; pos < isize; pos++) {
           TilePDB *pTile = tileArray[pos];

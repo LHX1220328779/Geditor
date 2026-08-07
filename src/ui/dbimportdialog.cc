@@ -5,6 +5,7 @@
 #include "algorithm/common.h"
 #include "dbimportdialog.h"
 #include "map/pdb_manage.h"
+#include "map/projection_utm.h"
 #include "map/tile_pdb.h"
 #include "pcd/db_read_write.h"
 #include "pcd/pcd_split.h"
@@ -45,6 +46,8 @@ void DBImportDialog::on_set_db_path_btn_clicked() {
       ui->zone_edit->setText(std::to_string(db_tra[0].zone).c_str());
 
       zone_ = db_tra[0].zone;
+      if (zone_ < 1 || zone_ > 60) zone_ = ProjectionUTM::zone;
+      ui->zone_edit->setText(std::to_string(zone_).c_str());
       origin_ = origin;
     } else {
       QMessageBox::warning(this, "警告", "无法读取DB");
@@ -107,6 +110,10 @@ void DBImportDialog::split_task() {
       //保存到数据库
       PDBManage database;
       if (database.Open(pdb_path_.c_str())) {
+        if (!database.SetUTMZone(zone_)) {
+          QMessageBox::warning(this, "警告", "无法保存UTM带区元数据");
+          return;
+        }
         size_t isize = tileArray.size();
         for (size_t pos = 0; pos < isize; pos++) {
           TilePDB *pTile = tileArray[pos];

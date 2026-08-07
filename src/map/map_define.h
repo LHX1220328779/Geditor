@@ -27,7 +27,7 @@ struct GPSPoint {
   GPSPoint() : altitude(0) {}
 
   GPSPoint(double lat, double lon, float alt)
-      : latlon(lat, lon), altitude(0.0f) {}
+      : latlon(lat, lon), altitude(alt) {}
 
   GPSPoint(const LatLon &latlon, float alt) : latlon(latlon), altitude(alt) {}
 };

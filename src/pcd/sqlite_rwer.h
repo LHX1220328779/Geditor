@@ -21,7 +21,7 @@ struct DBPoints {
 struct DBTraPoint {
   uint64_t time;
   double x, y, z;
-  int zone = 50;
+  int zone = 0;
 };
 
 constexpr size_t kDBPointLength = sizeof(DBPoint);

@@ -511,6 +511,7 @@
      <string>工具</string>
     </property>
     <addaction name="llh2utm"/>
+    <addaction name="mine_origin_config"/>
     <addaction name="view_pan"/>
     <addaction name="action_AUTO_BIND_TRAJECTORY"/>
    </widget>
@@ -646,6 +647,14 @@
   <action name="llh2utm">
    <property name="text">
     <string>经纬度与UTM互转</string>
+   </property>
+  </action>
+  <action name="mine_origin_config">
+   <property name="text">
+    <string>矿山原点配置</string>
+   </property>
+   <property name="toolTip">
+    <string>从项目根目录 mine_origins.yaml 选择矿山原点经纬度</string>
    </property>
   </action>
   <action name="show_pdb">

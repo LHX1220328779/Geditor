@@ -297,6 +297,12 @@ namespace geditor
     m_pCamera->SetPostion(V3d(utm.x, utm.y, 0.0));
   }
 
+  void Framework::setMapCenterUTM(double x, double y, double z)
+  {
+    if (m_pCamera)
+      m_pCamera->SetPostion(V3d(x, y, z));
+  }
+
   void Framework::Set2DView()
   {
     if (m_pCamera)
@@ -305,12 +311,7 @@ namespace geditor
     }
     else
     {
-      UTMPoint utm;
-      ProjectionUTM projectionUTM;
-      projectionUTM.LatLonToCartesian(40.078468435153049, 116.34162858593866,
-                                      utm);
-
-      m_PlanCamera.SetPostion(V3d(utm.x, utm.y, 0.0));
+      m_PlanCamera.SetPostion(V3d(0.0, 0.0, 0.0));
     }
     m_PlanCamera.SetOrtho(m_viewport.AspectRatio(), 0.5f, 500.0f);
     if (m_pCamera == &m_StereoCamera)
@@ -4240,9 +4241,20 @@ namespace geditor
                << " vs " << p->road_right << "，按第一个为准\n";
       }
     }
-    for (auto &kv : seen)
+    std::vector<std::pair<std::string, int>> aligned_rows(seen.begin(),
+                                                          seen.end());
+    std::sort(aligned_rows.begin(), aligned_rows.end(),
+              [](const auto &a, const auto &b) { return a.first < b.first; });
+    size_t code_width = std::string("mineSegmentCode").size();
+    for (const auto &row : aligned_rows)
+      code_width = std::max(code_width, row.first.size());
+
+    // Keep the 0/1 value at one fixed column so large road lists remain easy
+    // to inspect in a plain-text editor. Import remains whitespace-compatible.
+    for (const auto &row : aligned_rows)
     {
-      ofs << kv.first << " " << kv.second << "\n";
+      ofs << std::left << std::setw(static_cast<int>(code_width)) << row.first
+          << "  " << row.second << "\n";
       ++written;
     }
     ofs.close();

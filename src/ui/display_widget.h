@@ -12,6 +12,7 @@
 #include "core/point3d.h"
 #include "geditor_mainwindow.h"
 #include "map/feature_type.h"
+#include "map/mine_origin_config.h"
 #include "menu_widget.h"
 
 enum {
@@ -77,6 +78,8 @@ class DisplayWidget : public QOpenGLWidget {
   void On2dView();
 
   void OnConvertCoord();
+
+  void ApplyMineOrigin(const geditor::MineOrigin &origin);
 
   void OnUndoOperate();
 
@@ -231,6 +234,9 @@ class DisplayWidget : public QOpenGLWidget {
   bool mouse_middle_pressed_ = false;
 
   bool gl_initialized_ = false;
+
+  bool has_mine_origin_ = false;
+  geditor::MineOrigin mine_origin_;
 
   GeditorMainWindow *main_window_;
   int view_mode_ = 0;

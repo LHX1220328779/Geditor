@@ -7,25 +7,57 @@ import math
 WGS84_A = 6378137.0        # WGS84椭球体长半轴
 WGS84_E = 0.0818191908425  # WGS84椭球体第一偏心率
 
-# # 白马山原点
-# GLOBAL_ORIGIN_LAT = 31.1168866
-# GLOBAL_ORIGIN_LON = 118.1578271
-# GLOBAL_ORIGIN_ALT = 0.0
+def load_mine_origin(config_path, selected_name=None):
+    """使用 Python 标准库读取项目约定的简单 mine_origins.yaml。"""
+    required = {
+        'GLOBAL_ORIGIN_LAT',
+        'GLOBAL_ORIGIN_LON',
+        'GLOBAL_ORIGIN_ALT',
+    }
+    origins = {}
+    current_name = None
 
-# 若帽山原点
-GLOBAL_ORIGIN_LAT = 31.1367846
-GLOBAL_ORIGIN_LON = 118.1789369
-GLOBAL_ORIGIN_ALT = 0.0
+    with open(config_path, 'r', encoding='utf-8') as config_file:
+        for line_number, raw_line in enumerate(config_file, 1):
+            line = raw_line.split('#', 1)[0].rstrip()
+            if not line.strip() or line.strip() == 'mine_origins:':
+                continue
 
-# 库山原点
-# GLOBAL_ORIGIN_LAT = 0.0
-# GLOBAL_ORIGIN_LON = 0.0
-# GLOBAL_ORIGIN_ALT = 0.0
+            indent = len(line) - len(line.lstrip(' '))
+            key, separator, value = line.strip().partition(':')
+            if not separator:
+                raise ValueError(f'mine_origins.yaml 第 {line_number} 行格式错误')
 
-# tongling原点
-# GLOBAL_ORIGIN_LAT = 30.843261
-# GLOBAL_ORIGIN_LON = 117.805392
-# GLOBAL_ORIGIN_ALT = 0.0
+            if indent == 2 and not value.strip():
+                current_name = key.strip()
+                origins[current_name] = {}
+            elif indent == 4 and current_name is not None:
+                field = key.strip()
+                if field not in required:
+                    raise ValueError(
+                        f'mine_origins.yaml 第 {line_number} 行包含不支持的变量 {field}')
+                origins[current_name][field] = float(value.strip())
+            else:
+                raise ValueError(f'mine_origins.yaml 第 {line_number} 行缩进错误')
+
+    if not origins:
+        raise ValueError('mine_origins.yaml 中没有矿山配置')
+    mine_name = selected_name or next(iter(origins))
+    if mine_name not in origins:
+        raise ValueError(f'mine_origins.yaml 中不存在矿山 {mine_name}')
+    missing = required - origins[mine_name].keys()
+    if missing:
+        raise ValueError(f'矿山 {mine_name} 缺少变量: {", ".join(sorted(missing))}')
+    return mine_name, origins[mine_name]
+
+
+CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                           'mine_origins.yaml')
+MINE_NAME, MINE_ORIGIN = load_mine_origin(
+    CONFIG_PATH, os.environ.get('GEDITOR_MINE_NAME'))
+GLOBAL_ORIGIN_LAT = MINE_ORIGIN['GLOBAL_ORIGIN_LAT']
+GLOBAL_ORIGIN_LON = MINE_ORIGIN['GLOBAL_ORIGIN_LON']
+GLOBAL_ORIGIN_ALT = MINE_ORIGIN['GLOBAL_ORIGIN_ALT']
 
 class Point3d:
     def __init__(self, x=0.0, y=0.0, z=0.0):
@@ -300,10 +332,6 @@ def process_single_file(file_path, output_dir, output_filename, index, filename)
         filename: 原始文件名
     """
     output_file = os.path.join(output_dir, output_filename)
-    GLOBAL_ORIGIN_LAT = 31.1367846
-    GLOBAL_ORIGIN_LON = 118.1789369
-
-    origin_pt = trans_gps_to_pt(GLOBAL_ORIGIN_LON, GLOBAL_ORIGIN_LAT, 0.0)
     
     with open(file_path, 'r') as input_f, open(output_file, 'w', newline='') as output_f:
         reader = csv.reader(input_f)
@@ -379,9 +407,9 @@ if __name__ == "__main__":
     # print(f"utm_x={utm_x}, utm_y={utm_y}")
     # exit(0)
     
-    input_directory = "/home/project/HDMap_data/wuhu/WH_RTK_2026.04.21_V382_beta/Rtk_Map/gps"
-    output_directory = "/home/project/HDMap_data/wuhu/tra/20260421v382"
-    input_mapping = "/home/project/HDMap_data/wuhu/tra/20260420/mapping.txt"
+    input_directory = "/home/project/HDMap_data/liquan/LQ_RTK_2026.06.30_V38_beta/Rtk_Map/gps"
+    output_directory = "/home/project/HDMap_data/liquan/tra/20260716"
+    input_mapping = "/home/project/HDMap_data/liquan/tra/20260716/mapping.txt"
     mapping_file = os.path.join(output_directory, "mapping.txt")
     
     process_segment_files(input_directory, input_mapping, output_directory, mapping_file)

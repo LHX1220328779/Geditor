@@ -23,6 +23,9 @@ class PCDSplitter {
   bool SplitData(const PointCloud<PCLPoint> &cloud,
                  std::vector<TilePDB *> &tileArray);
 
+  bool SplitRGBData(const PointCloud<PCLRGBPoint> &cloud,
+                    std::vector<TilePDB *> &tileArray);
+
  private:
   double move_orgin_x;
   double move_orgin_y;

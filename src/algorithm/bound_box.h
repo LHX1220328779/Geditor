@@ -126,10 +126,10 @@ void BoundBox3<N>::ExpandBy(const VectorType &vec) {
 template <typename N>
 void BoundBox3<N>::ExpandBy(const BoundBox3<N> &box) {
   if (box.v_min_[0] < v_min_[0]) v_min_[0] = box.v_min_[0];
-  if (box.v_min_[0] < v_min_[0]) v_min_[0] = box.v_min_[0];
+  if (box.v_max_[0] > v_max_[0]) v_max_[0] = box.v_max_[0];
   if (box.v_min_[1] < v_min_[1]) v_min_[1] = box.v_min_[1];
   if (box.v_max_[1] > v_max_[1]) v_max_[1] = box.v_max_[1];
-  if (box.v_max_[2] > v_max_[2]) v_max_[2] = box.v_max_[2];
+  if (box.v_min_[2] < v_min_[2]) v_min_[2] = box.v_min_[2];
   if (box.v_max_[2] > v_max_[2]) v_max_[2] = box.v_max_[2];
 }
 

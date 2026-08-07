@@ -27,6 +27,7 @@ target_link_libraries(${PROJECT_NAME}
         ${PROJECT_NAME}_sprinkle
         ${THIRD_PARTY_LIBS}
         ${PCL_IO_LIBRARIES}
+        ${PCL_FILTERS_LIBRARY}
 )
 
 add_custom_command(TARGET  ${PROJECT_NAME} POST_BUILD

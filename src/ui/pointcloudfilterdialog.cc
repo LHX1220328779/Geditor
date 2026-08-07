@@ -2,6 +2,8 @@
 
 #include <QMessageBox>
 
+#include <limits>
+
 #include "ui/display_widget.h"
 #include "ui_pointcloudfilterdialog.h"
 
@@ -10,6 +12,12 @@
 PointCloudFilterDialog::PointCloudFilterDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::PointCloudFilterDialog), win_(parent) {
   ui->setupUi(this);
+  ui->min_height->setRange(std::numeric_limits<float>::lowest(),
+                           std::numeric_limits<float>::max());
+  ui->max_height->setRange(std::numeric_limits<float>::lowest(),
+                           std::numeric_limits<float>::max());
+  ui->spinBox_min_intensity->setRange(-1, 256);
+  ui->spinBox_max_intensity->setRange(-1, 256);
 }
 PointCloudFilterDialog::~PointCloudFilterDialog() { delete ui; }
 

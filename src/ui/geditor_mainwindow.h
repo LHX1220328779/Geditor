@@ -64,6 +64,8 @@ class GeditorMainWindow : public QMainWindow {
   void on_pcd2pdb_triggered();
   void on_llh2utm_triggered();
 
+  void on_mine_origin_config_triggered();
+
   void on_check_relation_clicked();
 
   void on_import_tra_triggered();

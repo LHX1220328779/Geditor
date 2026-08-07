@@ -10,7 +10,9 @@
 #include <QStatusBar>
 #include <chrono>
 #include <cstring>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 
 #include "core/bound_segment.h"
 #include "core/lane_segment.h"
@@ -56,6 +58,12 @@ void DisplayWidget::initializeGL() {
   m_framework.Init();
   m_MapMode = MO_MAP_EDIT;
   m_framework.Set2DView();
+  if (has_mine_origin_) {
+    // Point-cloud vertices are centered by each tile's altitude before
+    // rendering. The configured ALT is used for geographic conversion/export,
+    // while the display camera keeps its local Z origin at zero.
+    m_framework.setMapCenterUTM(mine_origin_.x, mine_origin_.y, 0.0);
+  }
 
   setMouseTracking(true);
   // this->grabKeyboard();
@@ -415,6 +423,7 @@ void DisplayWidget::OnImportFunctionPoint() {
 
 void DisplayWidget::OnImportGps() {
   ImportGPSDialog dlg;
+  if (has_mine_origin_) dlg.SetMineOrigin(mine_origin_);
   if (dlg.exec() == QDialog::Accepted) {
     int import_type = dlg.GetImportType();
     auto segment = dlg.GetSegment();
@@ -607,10 +616,22 @@ void DisplayWidget::OnDataSave() {
         std::string path = QCoreApplication::applicationDirPath().toStdString();
         QFileInfo fi(sel);
         if (fi.exists()) {
-          std::string dir = fi.absolutePath().toStdString();
-          std::string cmd =
-              path + "/vdb2pb " + sel.toStdString() + " " + dir + " 1.0";
-          system(cmd.c_str());
+          if (!has_mine_origin_) {
+            QMessageBox::warning(
+                this, "提示",
+                "VDB已保存；尚未选择矿山原点，因此跳过地图导出。请在工具->矿山原点配置中选择后重试。");
+          } else {
+            std::string dir = fi.absolutePath().toStdString();
+            std::ostringstream cmd;
+            cmd << std::setprecision(15) << path << "/vdb2pb "
+                << sel.toStdString() << " " << dir << " 1.0 "
+                << mine_origin_.longitude << " " << mine_origin_.latitude
+                << " " << mine_origin_.z << " " << mine_origin_.zone;
+            const int export_result = system(cmd.str().c_str());
+            if (export_result != 0) {
+              QMessageBox::warning(this, "警告", "地图导出失败，请检查日志");
+            }
+          }
         }
 
       } else {
@@ -648,6 +669,17 @@ void DisplayWidget::OnConvertCoord() {
     m_framework.setMapCenter(dlg.m_lat, dlg.m_lon);
     // ProjectionUTM::SetZoneByLon(dlg.m_lon);
   }
+}
+
+void DisplayWidget::ApplyMineOrigin(const geditor::MineOrigin &origin) {
+  if (origin.zone < 1 || origin.zone > 60) return;
+  mine_origin_ = origin;
+  has_mine_origin_ = true;
+  ProjectionUTM::zone = origin.zone;
+  if (gl_initialized_) {
+    m_framework.setMapCenterUTM(origin.x, origin.y, 0.0);
+  }
+  update();
 }
 
 void DisplayWidget::OnUndoOperate() { m_framework.UndoOperate(); }

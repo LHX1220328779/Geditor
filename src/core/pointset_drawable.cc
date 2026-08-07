@@ -15,8 +15,7 @@ PointSetDrawable::PointSetDrawable() {
 
   render_layout_ = new RenderLayout();
 
-  bound_box_.Set(V3f(1000.0f, 1000.0f, 1000.0f),
-                 V3f(-1000.0f, -1000.0f, -1000.0f));
+  bound_box_.Reset();
 }
 
 PointSetDrawable::~PointSetDrawable() {

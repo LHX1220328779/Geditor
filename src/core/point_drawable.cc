@@ -5,8 +5,7 @@
 namespace geditor {
 
 PointDrawable::PointDrawable() : m_vboId(0), m_vxCount(0) {
-  m_boundBox.Set(V3f(1000.0f, 1000.0f, 1000.0f),
-                 V3f(-1000.0f, -1000.0f, -1000.0f));
+  m_boundBox.Reset();
 }
 
 PointDrawable::~PointDrawable() {
@@ -60,6 +59,7 @@ void PointDrawable::DrawImplementation(RenderInfo &renderInfo) {
 }
 
 void PointDrawable::SetColorType(int type, int r) {
+  if (source_color_mode_) return;
   if (color_type_ < 0 || color_r_ < 0) {
     color_type_ = type;
     color_r_ = r;

@@ -16,30 +16,10 @@ namespace geditor
   namespace attribute_calc
   {
 
-    // rms
-    // double GLOBAL_ORIGIN_LAT = 31.1367846;
-    // double GLOBAL_ORIGIN_LON = 118.1789369;
-    // double GLOBAL_ORIGIN_ALT = 0.0;
-    // bms
-    double GLOBAL_ORIGIN_LAT = 31.228971;
-    double GLOBAL_ORIGIN_LON = 118.374336;
+    // Initialized from mine_origins.yaml by the UI/command-line entry point.
+    double GLOBAL_ORIGIN_LAT = 0.0;
+    double GLOBAL_ORIGIN_LON = 0.0;
     double GLOBAL_ORIGIN_ALT = 0.0;
-    // kushan
-    // double GLOBAL_ORIGIN_LAT = 31.1168866;
-    // double GLOBAL_ORIGIN_LON = 118.1578271;
-    // double GLOBAL_ORIGIN_ALT = 0.0;
-    // tongling
-    // double GLOBAL_ORIGIN_LAT = 30.843261;
-    // double GLOBAL_ORIGIN_LON = 117.805392;
-    // double GLOBAL_ORIGIN_ALT = 0.0;
-    // wuhu 箬帽山
-    // double GLOBAL_ORIGIN_LAT = 31.1367846;
-    // double GLOBAL_ORIGIN_LON = 118.1789369;
-    // double GLOBAL_ORIGIN_ALT = 0.0;
-    // zongyang
-    // double GLOBAL_ORIGIN_LAT = 30.7484730;
-    // double GLOBAL_ORIGIN_LON = 117.3938850;
-    // double GLOBAL_ORIGIN_ALT = 0.0;
     void InitGlobalOrigin(double lat, double lon, double alt)
     {
       GLOBAL_ORIGIN_LAT = lat;

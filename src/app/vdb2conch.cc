@@ -17,6 +17,7 @@
 #include "core/sign_board_layer.h"
 #include "fileopra.hpp"
 #include "map/pdb_manage.h"
+#include "map/mine_origin_config.h"
 namespace fs = std::filesystem;
 namespace geditor {
 
@@ -442,15 +443,28 @@ int main(int argc, char const* argv[]) {
   google::InitGoogleLogging(argv[0]);
   FLAGS_colorlogtostderr = true;
   FLAGS_stderrthreshold = 0;
-  if (argc < 3) return -1;
+  if (argc < 4) return -1;
   std::string filedb = argv[1];
   std::string name_mapping_file = argv[2];
   std::string fileconch = argv[3];
+  geditor::MineOrigin origin;
   if (argc >= 7) {
-    geditor::attribute_calc::GLOBAL_ORIGIN_LAT = atof(argv[5]);
-    geditor::attribute_calc::GLOBAL_ORIGIN_LON = atof(argv[4]);
-    geditor::attribute_calc::GLOBAL_ORIGIN_ALT = atof(argv[6]);
+    origin.longitude = atof(argv[4]);
+    origin.latitude = atof(argv[5]);
+    origin.z = atof(argv[6]);
+  } else {
+    std::vector<geditor::MineOrigin> origins;
+    std::string error;
+    const auto config = fs::absolute(argv[0]).parent_path().parent_path() /
+                        "mine_origins.yaml";
+    if (!geditor::MineOriginConfig::Load(config.string(), origins, &error)) {
+      std::cerr << "Mine origin is required: " << error << std::endl;
+      return -1;
+    }
+    origin = origins.front();
   }
+  geditor::attribute_calc::InitGlobalOrigin(origin.latitude, origin.longitude,
+                                             origin.z);
   geditor::VDB2Conch v2c;
   v2c.Run(filedb, name_mapping_file, fileconch);
   return 0;

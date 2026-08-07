@@ -3,6 +3,8 @@
 #include <minilzo.h>
 #include <sqlite_cpp.h>
 
+#include <limits>
+
 #include "map/pdb_define.h"
 #include "map/pdb_manage.h"
 #include "map/projection_utm.h"
@@ -24,42 +26,40 @@ PDBManage::~PDBManage() {
 bool PDBManage::QueryBound(GPSPoint &minGPSPt, GPSPoint &maxGPSPt) {
   minGPSPt.latlon.lat = 90.0;
   minGPSPt.latlon.lon = 180.0;
-  minGPSPt.altitude = 50000;
+  minGPSPt.altitude = std::numeric_limits<float>::max();
 
   maxGPSPt.latlon.lat = -90.0;
   maxGPSPt.latlon.lon = -180.0;
-  maxGPSPt.altitude = -50000;
+  maxGPSPt.altitude = std::numeric_limits<float>::lowest();
 
   const char *szSql =
       "select east, south, west, north, minAlt, maxAlt from TileTb;";
   SQLite::Statement query(*m_database, szSql);
-  int zone = -1;
+  int zone = 0;
+  GetUTMZone(zone);
+  bool has_row = false;
   while (query.executeStep()) {
+    has_row = true;
     double dEast = query.getColumn(0).getDouble();
     double dSouth = query.getColumn(1).getDouble();
     double dWest = query.getColumn(2).getDouble();
     double dNorth = query.getColumn(3).getDouble();
     double dMinAlt = query.getColumn(4).getDouble();
     double dMaxAlt = query.getColumn(5).getDouble();
-    int nzone = (int)(dSouth / 6.0 + 31);
-    if (zone >= 0 && zone != nzone) {
-      LOG(WARNING) << "utm zone changed:" << zone << "->" << nzone;
-      // break;
-      minGPSPt.latlon.lat = 90.0;
-      minGPSPt.latlon.lon = 180.0;
-      minGPSPt.altitude = 50000;
-
-      maxGPSPt.latlon.lat = -90.0;
-      maxGPSPt.latlon.lon = -180.0;
-      maxGPSPt.altitude = -50000;
+    if (zone < 1 || zone > 60) {
+      zone = static_cast<int>(dSouth / 6.0 + 31);
+      LOG(WARNING) << "PDB has no utm_zone metadata; inferred zone " << zone
+                   << " from longitude for backward compatibility";
     }
-    zone = nzone;
     if (minGPSPt.latlon.lat > dWest) minGPSPt.latlon.lat = dWest;
     if (maxGPSPt.latlon.lat < dEast) maxGPSPt.latlon.lat = dEast;
     if (minGPSPt.latlon.lon > dSouth) minGPSPt.latlon.lon = dSouth;
     if (maxGPSPt.latlon.lon < dNorth) maxGPSPt.latlon.lon = dNorth;
     if (minGPSPt.altitude > dMinAlt) minGPSPt.altitude = dMinAlt;
     if (maxGPSPt.altitude < dMaxAlt) maxGPSPt.altitude = dMaxAlt;
+  }
+  if (!has_row || zone < 1 || zone > 60) {
+    return false;
   }
   ProjectionUTM::zone = zone;
   LOG(INFO) << "utm zone:" << ProjectionUTM::zone;
@@ -76,25 +76,83 @@ bool PDBManage::Open(const char *filename) {
         "text,primary key(zone, tileX, tileY));";
 
     int ret = m_database->exec(szSql);
+    ret |= m_database->exec(
+        "create table if not exists MetadataTb(key text primary key, value "
+        "text not null);");
     if (ret == 0) {
-      const char *szSqlFind =
-          "select south, north from TileTb where rowid = 1 ";
-      SQLite::Statement query(*m_database, szSqlFind);
-
-      while (query.executeStep()) {
-        double south = query.getColumn(0).getDouble();
-        double north = query.getColumn(1).getDouble();
-
-        double northCnt = (south + north) * 0.5;
-        int nzone = (int)(northCnt / 6.0 + 31);
-
-        ProjectionUTM::zone = nzone;
+      int stored_zone = 0;
+      if (GetUTMZone(stored_zone)) {
+        ProjectionUTM::zone = stored_zone;
+      } else {
+        const char *szSqlFind =
+            "select south, north from TileTb where rowid = 1 ";
+        SQLite::Statement query(*m_database, szSqlFind);
+        if (query.executeStep()) {
+          double south = query.getColumn(0).getDouble();
+          double north = query.getColumn(1).getDouble();
+          ProjectionUTM::zone =
+              static_cast<int>(((south + north) * 0.5) / 6.0 + 31);
+        }
       }
       return true;
     }
     m_database->close();
   }
   return false;
+}
+
+bool PDBManage::SetUTMZone(int zone) {
+  if (m_database == nullptr || zone < 1 || zone > 60) {
+    LOG(ERROR) << "invalid UTM zone: " << zone;
+    return false;
+  }
+  SQLite::Statement query(
+      *m_database,
+      "insert or replace into MetadataTb(key, value) values('utm_zone', ?);");
+  query.bind(1, zone);
+  if (query.exec() <= 0) {
+    return false;
+  }
+  ProjectionUTM::zone = zone;
+  return true;
+}
+
+bool PDBManage::GetUTMZone(int &zone) {
+  if (m_database == nullptr) {
+    return false;
+  }
+  SQLite::Statement query(
+      *m_database,
+      "select value from MetadataTb where key = 'utm_zone';");
+  if (!query.executeStep()) {
+    return false;
+  }
+  int stored_zone = query.getColumn(0).getInt();
+  if (stored_zone < 1 || stored_zone > 60) {
+    LOG(ERROR) << "invalid utm_zone metadata: " << stored_zone;
+    return false;
+  }
+  zone = stored_zone;
+  return true;
+}
+
+bool PDBManage::SetPointColorModeRGB(bool enabled) {
+  if (m_database == nullptr) return false;
+  SQLite::Statement query(
+      *m_database,
+      "insert or replace into MetadataTb(key, value) values("
+      "'point_color_mode', ?);");
+  query.bind(1, enabled ? "rgb" : "intensity");
+  return query.exec() > 0;
+}
+
+bool PDBManage::UsesPointColorRGB() {
+  if (m_database == nullptr) return false;
+  SQLite::Statement query(
+      *m_database,
+      "select value from MetadataTb where key = 'point_color_mode';");
+  if (!query.executeStep()) return false;
+  return query.getColumn(0).getString() == "rgb";
 }
 
 bool PDBManage::Save(TilePDB *tile) {
@@ -192,7 +250,7 @@ bool PDBManage::Read(TilePDB *tile) {
 
       for (int i = 0; i < infoHdr.count; i++) {
         tile->Add(new_buf[i].latlon, new_buf[i].altitude, new_buf[i].intensity,
-                  new_buf[i].intensity);
+                  new_buf[i].height, new_buf[i].rgb);
       }
 
       delete[] new_buf;

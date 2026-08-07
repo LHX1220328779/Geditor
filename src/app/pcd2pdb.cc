@@ -29,19 +29,37 @@ class PCD2Pdb {
     }
     std::string line;
     int skip = 0, skiprow = 1;
+    bool has_record = false;
     while (std::getline(fs, line)) {
       if (skip++ < skiprow) continue;
       std::stringstream ss(line);
       std::string pcd;
-      double x, y, z, zone;
-      ss >> pcd >> x >> y >> z >> zone;
+      double x, y, z;
+      int zone;
+      if (!(ss >> pcd >> x >> y >> z >> zone)) {
+        LOG(ERROR) << "Invalid info.txt line: " << line;
+        return -1;
+      }
+      if (zone < 1 || zone > 60) {
+        LOG(ERROR) << "Invalid UTM zone in info.txt: " << zone;
+        return -1;
+      }
       pcd = dir + "/" + pcd;
       V3d origin(x, y, z);
       tra_[pcd] = origin;
-      if (skip == 2) {
+      if (!has_record) {
         zone_ = zone;
         origin_ = origin;
+        has_record = true;
+      } else if (zone_ != zone) {
+        LOG(ERROR) << "All info.txt records must use the same UTM zone: "
+                   << zone_ << " vs " << zone;
+        return -1;
       }
+    }
+    if (!has_record) {
+      LOG(ERROR) << "No point-cloud records in " << file;
+      return -1;
     }
     pdb_path_ = vdb;
     split_task();
@@ -62,6 +80,14 @@ class PCD2Pdb {
         //保存到数据库
         PDBManage database;
         if (database.Open(pdb_path_.c_str())) {
+          if (!database.SetUTMZone(zone_)) {
+            LOG(ERROR) << "Failed to save UTM zone metadata";
+            return;
+          }
+          if (!database.SetPointColorModeRGB(false)) {
+            LOG(ERROR) << "Failed to save point color metadata";
+            return;
+          }
           size_t isize = tileArray.size();
           for (size_t pos = 0; pos < isize; pos++) {
             TilePDB *pTile = tileArray[pos];
@@ -90,7 +116,9 @@ class PCD2Pdb {
         PCLPoint pp;
         pp.x = p.x + offset.x - origin_.x;
         pp.y = p.y + offset.y - origin_.y;
-        pp.z = p.z + offset.z - origin_.z;
+        // PDB altitude is absolute. X/Y are temporarily made relative because
+        // PCDSplitter adds the selected UTM origin back during projection.
+        pp.z = p.z + offset.z;
         pp.w = p.intensity;
         cloud.PushBack(pp);
       }

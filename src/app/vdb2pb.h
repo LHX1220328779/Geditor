@@ -15,6 +15,7 @@
 #include "core/log.h"
 #include "core/road_area_layer.h"
 #include "core/sign_board_layer.h"
+#include "map/mine_origin_config.h"
 
 namespace geditor {
 using PbLaneBoundary = map_engine::hdmap::LaneBoundary;
@@ -30,7 +31,8 @@ class VDB2PB {
  public:
   VDB2PB();
   ~VDB2PB();
-  int Run(std::string filedb, std::string filepb, std::string version);
+  int Run(std::string filedb, std::string filepb, std::string version,
+          const MineOrigin &origin);
   int ReadVDB(std::string file);
   int ConvFeature2Pb(std::string path, std::string version);
 

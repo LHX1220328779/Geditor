@@ -15,9 +15,9 @@
 namespace geditor {
 
 PCDSplitter::PCDSplitter() {
-  move_orgin_x = 443623.360;
-  move_orgin_y = 4436145.624;
-  orgin_zone = 49;
+  move_orgin_x = 0.0;
+  move_orgin_y = 0.0;
+  orgin_zone = 0;
 }
 
 PCDSplitter::~PCDSplitter() {}
@@ -57,6 +57,10 @@ void DivideLayer(const PointCloud<PCLPoint> &cloud,
 
 bool PCDSplitter::SplitData(const PointCloud<PCLPoint> &cloud,
                             std::vector<TilePDB *> &tileArray) {
+  if (orgin_zone < 1 || orgin_zone > 60) {
+    LOG(ERROR) << "UTM origin is not configured";
+    return false;
+  }
   std::vector<PointCloud<PCLPoint>> layerCloud;
   DivideLayer(cloud, layerCloud);
 
@@ -108,6 +112,52 @@ bool PCDSplitter::SplitData(const PointCloud<PCLPoint> &cloud,
   return true;
 }
 
+bool PCDSplitter::SplitRGBData(const PointCloud<PCLRGBPoint> &source,
+                               std::vector<TilePDB *> &tileArray) {
+  if (orgin_zone < 1 || orgin_zone > 60) {
+    LOG(ERROR) << "UTM origin is not configured";
+    return false;
+  }
+  std::vector<PointCloud<PCLRGBPoint>> layer_cloud(5);
+  const int seg_num[] = {4, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+  int seg_idx = 0;
+  int layer = 0;
+  for (unsigned int i = 0; i < source.GetPointCount(); ++i) {
+    layer_cloud[layer++].PushBack(source.GetPoint(i));
+    if (layer > seg_num[seg_idx]) {
+      layer = 0;
+      seg_idx = (seg_idx + 1) % (sizeof(seg_num) / sizeof(seg_num[0]));
+    }
+  }
+
+  ProjectionUTM project;
+  for (size_t zoom = 0; zoom < layer_cloud.size(); ++zoom) {
+    const auto &cloud = layer_cloud[zoom];
+    for (unsigned int pos = 0; pos < cloud.GetPointCount(); ++pos) {
+      const PCLRGBPoint point = cloud.GetPoint(pos);
+      LatLon latlon;
+      project.CartesianToLatLon(move_orgin_x + point.x,
+                               move_orgin_y + point.y, orgin_zone, false,
+                               latlon);
+      TileGrid grid(zoom);
+      TileTools::LatLon2Grid(latlon.lat, latlon.lon, grid);
+      TilePDB *tile = nullptr;
+      for (TilePDB *candidate : tileArray) {
+        if (candidate->GetTileGrid() == grid) {
+          tile = candidate;
+          break;
+        }
+      }
+      if (tile == nullptr) {
+        tile = new TilePDB(grid);
+        tileArray.push_back(tile);
+      }
+      tile->Add(latlon, point.z, point.w, point.w, point.rgb);
+    }
+  }
+  return true;
+}
+
 bool PCDSplitter::LoadPCDFile(const char *szPDBfile, const char *filename) {
   if (lzo_init() != LZO_E_OK) {
     return false;
@@ -122,6 +172,9 @@ bool PCDSplitter::LoadPCDFile(const char *szPDBfile, const char *filename) {
 
       PDBManage database;
       if (database.Open(szPDBfile)) {
+        if (!database.SetUTMZone(orgin_zone)) {
+          return false;
+        }
         size_t isize = tileArray.size();
         for (size_t pos = 0; pos < isize; pos++) {
           TilePDB *pTile = tileArray[pos];

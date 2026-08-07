@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include "algorithm/common.h"
 
 namespace geditor {
@@ -21,6 +22,16 @@ struct PointColor {
       : point(x, y, z), color(clr) {}
 
   PointColor(const V3f &vec, const V4f &clr) : point(vec), color(clr) {}
+
+  static V4f FromRGB(std::uint32_t rgb, float intensity) {
+    V4f color;
+    color.x = static_cast<float>((rgb >> 16) & 0xff) / 255.0f;
+    color.y = static_cast<float>((rgb >> 8) & 0xff) / 255.0f;
+    color.z = static_cast<float>(rgb & 0xff) / 255.0f;
+    // Alpha is reused by the existing shader as the optional intensity filter.
+    color.w = intensity;
+    return color;
+  }
 
   static V4f GetColor(int intensity, float z, int type, int c) {
     static std::vector<V4f> iColor;

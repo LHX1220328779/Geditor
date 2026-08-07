@@ -2,6 +2,7 @@
 #include <memory.h>
 #include <minilzo.h>
 #include <cstdint>
+#include <limits>
 
 #include "map/pdb_define.h"
 #include "map/tile_pdb.h"
@@ -13,14 +14,14 @@ TilePDB::TilePDB(const TileGrid &grid) : grid_(grid) {
   point_cloud_.reserve(1024);
 
   max_point_.latlon = LatLon(-90.0, -180.0);
-  max_point_.altitude = -20000.0f;
+  max_point_.altitude = std::numeric_limits<float>::lowest();
 
   min_point_.latlon = LatLon(90.0, 180.0);
-  min_point_.altitude = 20000.0f;
+  min_point_.altitude = std::numeric_limits<float>::max();
 }
 
 void TilePDB::Add(const LatLon &latlon, float altitude, float intensity,
-                  float height) {
+                  float height, std::uint32_t rgb) {
   if (altitude < min_point_.altitude) {
     min_point_.altitude = altitude;
   }
@@ -42,7 +43,7 @@ void TilePDB::Add(const LatLon &latlon, float altitude, float intensity,
     max_point_.latlon.lon = latlon.lon;
   }
 
-  point_cloud_.push_back(PDBPoint(latlon, altitude, intensity, height));
+  point_cloud_.push_back(PDBPoint(latlon, altitude, intensity, height, rgb));
 }
 
 int TilePDB::GetPointCount() { return point_cloud_.size(); }

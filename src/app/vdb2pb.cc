@@ -55,8 +55,12 @@ VDB2PB::~VDB2PB() {
   delete layer_sign_;
   delete layer_job_;
 }
-int VDB2PB::Run(std::string filedb, std::string filepb, std::string version) {
+int VDB2PB::Run(std::string filedb, std::string filepb, std::string version,
+                const MineOrigin &origin) {
   RETURN_VAL_IF(ReadVDB(filedb) < 0, -1);
+  ProjectionUTM::zone = origin.zone;
+  attribute_calc::InitGlobalOrigin(origin.latitude, origin.longitude,
+                                   origin.z);
   RETURN_VAL_IF(ConvFeature2Pb(filepb, version) < 0, -1);
   return 0;
 }
@@ -495,7 +499,8 @@ int VDB2PB::ConvFeature2Pb(std::string path, std::string version) {
   oss << std::put_time(currentTimeInfo, "%Y-%m-%d %H:%M:%S");
   map_header->set_date(oss.str());
   map_header->mutable_projection()->set_proj(
-      "+proj=utm +zone=50 +ellps=WGS84 +datum=WGS84 +units=m +no_defs");
+      "+proj=utm +zone=" + std::to_string(ProjectionUTM::zone) +
+      " +ellps=WGS84 +datum=WGS84 +units=m +no_defs");
 
   for (auto& road_pair : pb_roads) {
     *(map.add_road()) = road_pair.second;
@@ -866,12 +871,32 @@ int main(int argc, char const* argv[]) {
   google::InitGoogleLogging(argv[0]);
   FLAGS_colorlogtostderr = true;
   FLAGS_stderrthreshold = 0;
-  if (argc < 3) return -1;
+  if (argc < 4) return -1;
   std::string filedb = argv[1];
   std::string filepb = argv[2];
   std::string version = argv[3];
+  geditor::MineOrigin origin;
+  if (argc >= 8) {
+    origin.longitude = std::stod(argv[4]);
+    origin.latitude = std::stod(argv[5]);
+    origin.z = std::stod(argv[6]);
+    origin.zone = std::stoi(argv[7]);
+    origin.name = "command-line";
+  } else {
+    std::vector<geditor::MineOrigin> origins;
+    std::string error;
+    const auto config = std::filesystem::absolute(argv[0]).parent_path()
+                            .parent_path() /
+                        "mine_origins.yaml";
+    if (!geditor::MineOriginConfig::Load(config.string(), origins, &error)) {
+      std::cerr << "Mine origin is required: " << error << std::endl;
+      return -1;
+    }
+    origin = origins.front();
+  }
+  if (origin.zone < 1 || origin.zone > 60) return -1;
   geditor::VDB2PB v2pb;
-  v2pb.Run(filedb, filepb, version);
+  if (v2pb.Run(filedb, filepb, version, origin) < 0) return -1;
   std::cout << "vdb to pb trans ok!" << std::endl;
   return 0;
 }

@@ -13,7 +13,9 @@ double ProjectionUTM::sm_b = 6356752.314;
 double ProjectionUTM::sm_EccSquared = 6.69437999013e-03;
 double ProjectionUTM::UTMScaleFactor = 0.9996;
 
-int ProjectionUTM::zone = 50;
+// Set from PDB/VDB metadata, info.txt import data, or the UI mine-origin
+// selector. Zero makes an unconfigured coordinate system explicit.
+int ProjectionUTM::zone = 0;
 
 /*
  * ArcLengthOfMeridian
@@ -359,6 +361,51 @@ void ProjectionUTM::LatLonToCartesian(double lat, double lon, UTMPoint &xy) {
   }
   double dlon = lon - UTMCentralMeridian(zone);
   xy.gamma = sin(lat) * dlon;
+}
+
+void ProjectionUTM::LocalENUToGPS(double east, double north, double up,
+                                  double origin_lat, double origin_lon,
+                                  double origin_alt, GPSPoint &gps) {
+  const double lat0 = origin_lat / 180.0 * pi;
+  const double lon0 = origin_lon / 180.0 * pi;
+  const double sin_lat0 = std::sin(lat0);
+  const double cos_lat0 = std::cos(lat0);
+  const double sin_lon0 = std::sin(lon0);
+  const double cos_lon0 = std::cos(lon0);
+
+  const double n0 = sm_a /
+                    std::sqrt(1.0 - sm_EccSquared * sin_lat0 * sin_lat0);
+  const double x0 = (n0 + origin_alt) * cos_lat0 * cos_lon0;
+  const double y0 = (n0 + origin_alt) * cos_lat0 * sin_lon0;
+  const double z0 = (n0 * (1.0 - sm_EccSquared) + origin_alt) * sin_lat0;
+
+  // ENU axes at the configured origin, expressed in ECEF.
+  const double x = x0 - sin_lon0 * east - sin_lat0 * cos_lon0 * north +
+                   cos_lat0 * cos_lon0 * up;
+  const double y = y0 + cos_lon0 * east - sin_lat0 * sin_lon0 * north +
+                   cos_lat0 * sin_lon0 * up;
+  const double z = z0 + cos_lat0 * north + sin_lat0 * up;
+
+  const double longitude = std::atan2(y, x);
+  const double horizontal = std::hypot(x, y);
+  double latitude =
+      std::atan2(z, horizontal * (1.0 - sm_EccSquared));
+  double altitude = 0.0;
+
+  // Iterative ECEF -> geodetic conversion remains stable for arbitrary mine
+  // elevations and avoids imposing any fixed altitude range.
+  for (int i = 0; i < 10; ++i) {
+    const double sin_lat = std::sin(latitude);
+    const double n =
+        sm_a / std::sqrt(1.0 - sm_EccSquared * sin_lat * sin_lat);
+    altitude = horizontal / std::cos(latitude) - n;
+    latitude = std::atan2(
+        z, horizontal * (1.0 - sm_EccSquared * n / (n + altitude)));
+  }
+
+  gps.latlon.lat = latitude / pi * 180.0;
+  gps.latlon.lon = longitude / pi * 180.0;
+  gps.altitude = static_cast<float>(altitude);
 }
 
 /*

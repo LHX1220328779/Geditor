@@ -8,6 +8,8 @@
 
 #include "utils/color_interpolation.h"
 
+#include <limits>
+
 #include "renderGL/mc_render_pass.h"
 #include "renderGL/mc_render_technique.h"
 #include "renderGL/mc_technique_manager.h"
@@ -17,10 +19,12 @@ namespace geditor {
 PDBLayer::PDBLayer()
     : Layer(LT_PDB),
       m_database(nullptr),
-      m_minValue(0),
-      m_maxValue(255),
-      m_minHigh(-50),
-      m_maxHigh(50),
+      // Shader comparisons are strict; one-unit padding keeps the complete
+      // conventional [0, 255] intensity range visible by default.
+      m_minValue(-1),
+      m_maxValue(256),
+      m_minHigh(std::numeric_limits<float>::lowest()),
+      m_maxHigh(std::numeric_limits<float>::max()),
       m_loader(nullptr) {}
 
 void PDBLayer::SetDataSource(const char *szName) {
@@ -45,6 +49,7 @@ void PDBLayer::SetDataSource(const char *szName) {
 
   // 启动加载线程
   if (m_database->Open(szName)) {
+    m_loader->SetUseSourceRGB(m_database->UsesPointColorRGB());
     m_loader->SetDataFile(m_database);
     m_loader->start();
   }

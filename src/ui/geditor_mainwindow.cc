@@ -20,6 +20,7 @@
 #include "pcdimportdialog.h"
 #include "adaptive_boundary_dialog.h"
 #include "roadrightdialog.h"
+#include "mineorigindialog.h"
 #include "ui_geditor_mainwindow.h"
 #include "uploaddialog.h"
 
@@ -49,6 +50,9 @@ GeditorMainWindow::GeditorMainWindow(QWidget *parent)
   timer_ = std::make_shared<QTimer>(this);
   connect(timer_.get(), SIGNAL(timeout()), this, SLOT(update()));
   timer_->start(50);
+
+  QTimer::singleShot(0, this,
+                     &GeditorMainWindow::on_mine_origin_config_triggered);
 }
 
 GeditorMainWindow::~GeditorMainWindow() { delete ui; }
@@ -196,6 +200,16 @@ void GeditorMainWindow::on_action_EXIT_triggered() { close(); }
 
 void GeditorMainWindow::on_llh2utm_triggered() {
   ui->display_widget->OnConvertCoord();
+}
+
+void GeditorMainWindow::on_mine_origin_config_triggered() {
+  MineOriginDialog dlg(this);
+  if (dlg.IsConfigValid() && dlg.exec() == QDialog::Accepted) {
+    const auto origin = dlg.SelectedOrigin();
+    ui->display_widget->ApplyMineOrigin(origin);
+    status_label_->setText(
+        QString("当前矿山：%1").arg(QString::fromStdString(origin.name)));
+  }
 }
 
 void GeditorMainWindow::on_action_VIEW_TOOLBAR_triggered() {

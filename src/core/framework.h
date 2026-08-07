@@ -56,6 +56,8 @@ class Framework : public Object {
 
   void setMapCenter(double lat, double lon);
 
+  void setMapCenterUTM(double x, double y, double z = 0.0);
+
   //平滑移动接口
   void ViewPanMap();
 

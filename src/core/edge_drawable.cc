@@ -15,8 +15,7 @@ EgdeDrawable::EgdeDrawable() {
 
   m_pRenderLayout = new RenderLayout();
 
-  m_boundBox.Set(V3f(1000.0f, 1000.0f, 1000.0f),
-                 V3f(-1000.0f, -1000.0f, -1000.0f));
+  m_boundBox.Reset();
 }
 
 EgdeDrawable::~EgdeDrawable() {
