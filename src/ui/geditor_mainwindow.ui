@@ -794,7 +794,7 @@
     <string>校验中心线连通性</string>
    </property>
    <property name="toolTip">
-    <string>检查所有中心线的前续/后继关系是否符合 起始/终止/中间 角色</string>
+    <string>检查所有中心线的前续/后继关系；异常中心线与左右边界之间的区域将显示为浅黄色</string>
    </property>
   </action>
   <action name="action_QUICK_ADAPTIVE_BOUNDARY">

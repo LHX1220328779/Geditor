@@ -524,6 +524,7 @@ void GeditorMainWindow::on_action_QUICK_IMPORT_ROAD_RIGHT_triggered() {
 void GeditorMainWindow::on_action_QUICK_CHECK_CONNECTIVITY_triggered() {
   geditor::Framework::ConnectivityDiagnostic diag;
   int isolated = ui->display_widget->OnCheckLaneConnectivity(&diag);
+  ui->display_widget->update();
   QDialog dlg(this);
   dlg.setWindowTitle("中心线连通性校验");
   dlg.resize(720, 520);
@@ -541,6 +542,22 @@ void GeditorMainWindow::on_action_QUICK_CHECK_CONNECTIVITY_triggered() {
   else
     lbl->setStyleSheet("color:#080;font-weight:bold;");
   layout->addWidget(lbl);
+  auto *legend = new QLabel(&dlg);
+  legend->setWordWrap(true);
+  if (isolated > 0) {
+    legend->setText(
+        QString("浅黄色区域表示连通性异常中心线，共 %1 条；再次执行校验会刷新标记。")
+            .arg(isolated));
+    legend->setStyleSheet(
+        "background:#fff1a8;color:#5f4b00;border:1px solid #e2c85c;"
+        "border-radius:3px;padding:8px;");
+  } else {
+    legend->setText("未发现连通性异常，已清除上一次校验产生的浅黄色标记。");
+    legend->setStyleSheet(
+        "background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7;"
+        "border-radius:3px;padding:8px;");
+  }
+  layout->addWidget(legend);
   auto *txt = new QTextEdit(&dlg);
   txt->setReadOnly(true);
   txt->setPlainText(QString::fromStdString(diag.detail));

@@ -2,6 +2,7 @@
 #pragma once
 
 #include <map>
+#include <unordered_set>
 #include <vector>
 
 #include "core/geo_arc_line.h"
@@ -62,6 +63,14 @@ class SegmentLayer : public Layer {
   void SetVizRoadRight(bool on);
 
   bool GetVizRoadRight() const { return viz_road_right_; }
+
+  // 连通性校验后，将异常中心线的左右边界蒙版显示为浅黄色。
+  // 每次调用都完整替换上一次结果；传入空集合即清除高亮。
+  void SetConnectivityWarnings(const std::vector<int> &lane_ids);
+
+  bool IsConnectivityWarning(int lane_id) const {
+    return connectivity_warning_lane_ids_.count(lane_id) > 0;
+  }
 
   // 设定行驶方向时：对 direction!=0 的中心线叠加半透明色带高亮
   // (上山 浅蓝 / 下山 黄色)
@@ -141,6 +150,7 @@ class SegmentLayer : public Layer {
 
   bool check_;
   bool viz_road_right_ = false;
+  std::unordered_set<int> connectivity_warning_lane_ids_;
   bool show_direction_overlay_ = false;
   double line_width_;
   double point_size_;

@@ -101,7 +101,7 @@ def main():
     parser.add_argument(
         "--dir",
         type=str,
-        default="/home/project/HDMap_data/kushan/路线包/test",
+        default="/home/project/HDMap_data/shuangfeng/路线包/test",
         help="包含路段.txt和xlsx文件的根目录路径",
     )
     args = parser.parse_args()

@@ -4201,6 +4201,9 @@ namespace geditor
         detail << id << " ";
       detail << "\n";
     }
+    // 校验结果直接驱动渲染层。空结果同样写入，以清除上一次校验遗留的
+    // 黄色蒙版；不依赖结果对话框是否仍然打开。
+    m_Segmentlayer->SetConnectivityWarnings(isolatedIds);
     if (diag)
     {
       diag->totalLanes = (int)lanes.size();

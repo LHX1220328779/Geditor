@@ -838,6 +838,7 @@ namespace geditor
   }
   void SegmentLayer::ClearLayer()
   {
+    connectivity_warning_lane_ids_.clear();
     for (int i = 0; i < lane_segment_.size(); i++)
     {
       delete lane_segment_[i];
@@ -1264,6 +1265,17 @@ namespace geditor
     }
   }
 
+  void SegmentLayer::SetConnectivityWarnings(const std::vector<int> &lane_ids)
+  {
+    connectivity_warning_lane_ids_.clear();
+    connectivity_warning_lane_ids_.insert(lane_ids.begin(), lane_ids.end());
+    for (std::vector<LaneSegment *>::iterator it = lane_segment_.begin();
+         it != lane_segment_.end(); it++)
+    {
+      (*it)->SetChanged(true);
+    }
+  }
+
   void SegmentLayer::SetShowDirectionOverlay(bool on)
   {
     show_direction_overlay_ = on;
@@ -1406,6 +1418,12 @@ namespace geditor
             !_dirActiveEarly)
         {
           col = V4f(0.2f, 0.8f, 0.30f, 0.6f);
+        }
+        // 连通性异常拥有最高的区域蒙版优先级。这样即使同时开启了
+        // road_right 可视化，异常中心线也始终保持清晰的浅黄色提示。
+        if (IsConnectivityWarning(pLaneSegment->GetUniqueID()))
+        {
+          col = V4f(1.00f, 0.88f, 0.35f, 0.55f);
         }
         std::vector<Point3d> itemslane;
         pPolyline->Hermite(itemslane);
